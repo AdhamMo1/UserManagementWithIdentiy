@@ -47,6 +47,8 @@ namespace UserManagementWithIdentiy.Areas.Identity.Pages.Account.Manage
             [Display(Name = "First Name")]
             [MaxLength(100)]
             public string LastName { get; set; }
+            [Display(Name ="Profile Picture")]
+            public byte[] ProfilePicture { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
