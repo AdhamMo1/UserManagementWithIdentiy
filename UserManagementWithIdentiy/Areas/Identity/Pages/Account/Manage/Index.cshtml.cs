@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -61,10 +62,10 @@ namespace UserManagementWithIdentiy.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                FirstName =user.FirstName,
+                FirstName = user.FirstName,
                 LastName = user.LastName,
                 PhoneNumber = phoneNumber,
-                
+                ProfilePicture = user.ProfilePicture
             };
         }
 
@@ -119,6 +120,16 @@ namespace UserManagementWithIdentiy.Areas.Identity.Pages.Account.Manage
                     StatusMessage = "Unexpected error when trying to set phone number.";
                     return RedirectToPage();
                 }
+            }
+            if(Request.Form.Files.Count > 0)
+            {
+                var file = Request.Form.Files.FirstOrDefault();
+                using(var dataStream = new MemoryStream())
+                {
+                    await file.CopyToAsync(dataStream);
+                    user.ProfilePicture =dataStream.ToArray();
+                }
+                await _userManager.UpdateAsync(user);
             }
 
             await _signInManager.RefreshSignInAsync(user);
