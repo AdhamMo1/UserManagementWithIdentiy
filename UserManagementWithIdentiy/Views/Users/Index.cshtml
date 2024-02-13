@@ -1,0 +1,33 @@
+﻿@using UserManagementWithIdentiy.ViewModels
+@model IEnumerable<UsersViewModel>
+
+<h2>Users</h2>
+<hr />
+
+<table class="table table-bordered table-hover ">
+    <thead class="bg-primary text-white">
+        <tr>
+            <th>Profile Picture</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>UserName</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var user in Model)
+        {
+            <tr>
+                   <td><img src="data:image/*;base64,@Convert.ToBase64String(user.ProfilePicture)" class="rounded-circle" style="height:40px;width:40px;object-fit:cover;margin-left:50px" alt="User-img" /> </td>
+                   <td>@user.FirstName</td>
+                   <td>@user.LastName</td>
+                   <td>@user.UserName</td>
+                   <td>@user.Email</td>
+                   <td> @string.Join(" - ", user.RoleName)</td>
+                   <td><a asp-action="ManageRoles" asp-controller="Roles" asp-route-id="@user.id" class="btn btn-primary">Manage Roles</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
