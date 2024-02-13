@@ -1,0 +1,10 @@
+﻿@using UserManagementWithIdentiy.ViewModels
+@model RoleFormViewModel;
+
+<form method="post" asp-action="add">
+    <div class="input-group">
+        <input type="text" asp-for=Name class="form-control" placeholder="Enter Role Name....." />
+        <button type="submit" class=" text-white btn btn-primary input-group-append">ADD</button>
+    </div>
+    <span asp-validation-for="Name" class="text-danger"></span>
+</form>
