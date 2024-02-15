@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -45,6 +46,44 @@ namespace UserManagementWithIdentiy.Controllers
              return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ManageRole(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            var roles = await _roleManager.Roles.ToListAsync();
+
+            var viewModel = new UserRoleViewModel()
+            {
+                UserId = user.Id,
+                UserName = user.UserName,
+                Roles = roles.Select(x=> new RoleViewModel() { RoleId = x.Id, RoleName = x.Name ,Selected =_userManager.IsInRoleAsync(user,x.Name).Result }).ToList(),
+                
+            };
+            
+            return View("ManageRole",viewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveManageRole(UserRoleViewModel _user)
+        {
+            var user = await _userManager.FindByIdAsync(_user.UserId);
+
+            if (user == null)
+                return NotFound();
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            foreach (var role in _user.Roles)
+            {
+                if (userRoles.Any(r => r == role.RoleName) && !role.Selected)
+                    await _userManager.RemoveFromRoleAsync(user, role.RoleName);
+
+                if (!userRoles.Any(r => r == role.RoleName) && role.Selected)
+                    await _userManager.AddToRoleAsync(user, role.RoleName);
+            }
+
+            return RedirectToAction(nameof(Index),"Users");
+        }
        
     }
 }

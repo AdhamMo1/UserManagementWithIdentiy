@@ -25,8 +25,8 @@
                    <td>@user.LastName</td>
                    <td>@user.UserName</td>
                    <td>@user.Email</td>
-                   <td> @string.Join(" - ", user.RoleName)</td>
-                   <td><a asp-action="ManageRoles" asp-controller="Roles" asp-route-id="@user.id" class="btn btn-primary">Manage Roles</a></td>
+                   <td> @string.Join(" - ",user.RoleName)</td>
+                   <td><a asp-action="ManageRole" asp-controller="Roles" asp-route-id="@user.id" class="btn btn-primary">Manage Roles</a></td>
             </tr>
         }
     </tbody>
