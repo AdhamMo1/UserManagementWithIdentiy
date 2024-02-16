@@ -3,7 +3,7 @@
 
 <h2>Users</h2>
 <hr />
-
+<a asp-action="AddUser" class="btn btn-primary mb-2">New User</a>
 <table class="table table-bordered table-hover ">
     <thead class="bg-primary text-white">
         <tr>
@@ -20,8 +20,13 @@
         @foreach(var user in Model)
         {
             <tr>
-                   <td><img src="data:image/*;base64,@Convert.ToBase64String(user.ProfilePicture)" class="rounded-circle" style="height:40px;width:40px;object-fit:cover;margin-left:50px" alt="User-img" /> </td>
-                   <td>@user.FirstName</td>
+                @if(user.ProfilePicture != null)
+                {
+                    <td><img src="data:image/*;base64,@Convert.ToBase64String(user.ProfilePicture)" class="rounded-circle" alt="User-image" style="height:50px;width:50px;object-fit:cover" /></td>
+                }else{
+                  <td><img src="~/imges/empty-profile-png.jpg" alt="Alternate Text" class="rounded-circle"style="height:50px;width:50px;object-fit:cover" /></td>
+                }
+                <td>@user.FirstName</td>
                    <td>@user.LastName</td>
                    <td>@user.UserName</td>
                    <td>@user.Email</td>
