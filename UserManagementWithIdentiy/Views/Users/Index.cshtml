@@ -32,8 +32,53 @@
                    <td>@user.Email</td>
                    <td> @string.Join(" - ",user.RoleName)</td>
                    <td><a asp-action="ManageRole" asp-controller="Roles" asp-route-id="@user.id" class="btn btn-primary">Manage Roles</a>
-                   <a asp-action="Edit" asp-controller="Users" asp-route-id="@user.id" class="btn btn-outline-primary">Modify Profile</a></td>
+                   <a asp-action="Edit" asp-controller="Users" asp-route-id="@user.id" class="btn btn-outline-primary">Modify Profile</a>
+                   <a class="btn btn-danger m-1 js" data-id="@user.id"> Delete</a></td>
             </tr>
         }
     </tbody>
 </table>
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            toastr.options = {
+                "preventDuplicates": true
+            }
+            $('.js').on('click', function () {
+                var btn = $(this);
+                bootbox.confirm({
+                    message: 'Are you sure that you need to delete this user?',
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-success'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-danger'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: '/Users/delete/' + btn.data('id'),
+                                method: 'DELETE',
+                                success: function () {
+                                    btn.parents('tr').remove();
+                                    toastr.success('User Deleted..');
+                                },
+                                error: function () {
+                                    toastr.error('Somthing went wrong..');
+                                }
+
+                            });
+                        }
+                    }
+                });
+
+
+            });
+        });
+    </script>
+}

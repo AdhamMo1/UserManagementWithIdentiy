@@ -130,5 +130,13 @@ namespace UserManagementWithIdentiy.Controllers
             await _userManager.UpdateAsync(_user);
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> delete(string  id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            await _userManager.DeleteAsync(user);
+            return RedirectToAction("Index");
+        }
     }
 }
