@@ -87,5 +87,48 @@ namespace UserManagementWithIdentiy.Controllers
             await _userManager.AddToRolesAsync(user,_user.Roles.Where(x=>x.Selected).Select(x=>x.RoleName).ToList());
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit (string id)
+        {
+            var _user= await _userManager.FindByIdAsync(id);
+            var viewModel = new EditFormViewModel { 
+                Id=_user.Id,
+                FirstName= _user.FirstName,
+                LastName= _user.LastName,
+                Email = _user.Email,
+                UserName= _user.UserName
+            };
+            return View(viewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveEdit(EditFormViewModel model)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            
+            var _user =await _userManager.FindByIdAsync(model.Id);
+
+            var FindEmail = await _userManager.FindByEmailAsync(model.Email);
+            if(FindEmail!=null && FindEmail.Id != model.Id)
+            {
+                ModelState.AddModelError("Email", "Email is Exist...,Try another..");
+                return View(model);
+            }
+            var FindUserName = await _userManager.FindByNameAsync(model.UserName);
+            if(FindUserName != null && FindUserName.Id != model.Id)
+            {
+                ModelState.AddModelError("UserName", "User Name is Exist...,Try another..");
+            }
+            _user.FirstName = model.FirstName;
+            _user.LastName = model.LastName;
+            _user.Email = model.Email;
+            _user.UserName = model.UserName;
+            await _userManager.UpdateAsync(_user);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

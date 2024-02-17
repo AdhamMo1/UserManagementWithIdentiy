@@ -1,0 +1,39 @@
+﻿@using UserManagementWithIdentiy.ViewModels
+@model EditFormViewModel
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-controller="Users" asp-action="SaveEdit" asp-route-id="@Model.Id" method="post">
+            <h4>Modify account</h4>
+            <hr />
+            <div class="form-group">
+                <label asp-for="FirstName"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserName"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+
+            </div>
+        </form>
+        <a class="btn btn-dark" asp-action="Index">Cancel</a>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
